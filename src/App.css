@@ -84,7 +84,6 @@ header {
   border-radius:4px;
   vertical-align:middle;
   text-align: center;
-  cursor:pointer;
   font-size:10pt;
   color:gray;
   height:20px;
@@ -142,12 +141,13 @@ header {
   box-shadow:2px 5px 10px black;
 }
 
-.toast-link {
+.toast-button {
   text-decoration: none;
   text-transform: uppercase;
   color: #b0bfd3;
   margin:0 5px 0 20px;
   font-size:smaller;
+  cursor: pointer;
 }
 
 @keyframes fadeInAnimation {
