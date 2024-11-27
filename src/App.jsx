@@ -1,29 +1,53 @@
 import './App.css';
+import React, { useState, useEffect } from 'react';
 
-function App() {
+export default function App() {
+  const [tvChannels, setTvChannels] = useState([]);
+
+  useEffect(() => {
+      const fetchTvProgram = async () => {
+          try {
+              const response = await fetch('https://api.codetabs.com/v1/proxy?quest=tv24.lt');
+              const text = await response.text();
+              
+              // Parse the HTML
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(text, 'text/html');
+
+              // Extract channel information
+              const channels = Array.from(doc.querySelectorAll('.schedule')).map(channel => {
+                  return {
+                      name: channel.querySelector('.front-channel-icon').textContent || "unknown",
+                      logo: channel.querySelector('img').src,
+                      title: channel.querySelector('.item-label a')?.textContent || "unknown",
+                      time: channel.querySelector('.item-time')?.textContent || "no time",
+                  };
+              });
+
+              // Update state with extracted channels
+              setTvChannels(channels);
+
+          } catch (error) {
+              console.error('Error fetching TV program:', error);
+
+          }
+      };
+
+      fetchTvProgram();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="Octocat.png" className="App-logo" alt="logo" />
-        <p>
-          GitHub Codespaces <span className="heart">♥️</span> React
-        </p>
-        <p className="small">
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
-    </div>
+      <div>
+          <h1>Test</h1>
+          <ul>
+              {tvChannels.map((channel, index) => (
+                  <li key={index}>
+                      <img src={channel.logo} alt={channel.name} />
+                      <span>{channel.name}</span>
+                      <p>{channel.time} {channel.title}</p>
+                  </li>
+              ))}
+          </ul>
+      </div>
   );
 }
-
-export default App;
