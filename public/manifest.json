@@ -1,6 +1,6 @@
 {
-  "short_name": "TV programa",
-  "name": "TV programa",
+  "short_name": "Mano TV",
+  "name": "Mano TV",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#f5f5f5",
   "background_color": "#ffffff"
 }
