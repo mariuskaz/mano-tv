@@ -3,8 +3,9 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 
 export default function App() {
     const [guide, setGuide] = useState({})
+    const [updated, setUpdated] = useState(false)
     const [synced, setSynced] = useState(false)
-    const [found, setFound] = useState(false)
+    const [items, setItems] = useState(-1)
   
     const epg_link = 'https://www.bevy.be/bevyfiles/lithuania3.xml'
   
@@ -24,7 +25,7 @@ export default function App() {
       { 
         id: "TV3.lt",
         url: "https://play.tv3.lt/lives",
-        logo: "https://www.programatv.lt/images/channels/03.png?v=1", //"https://content.tvprograma.lt/logo/220x80_0_65492700_1578497500m.png",
+        logo: "https://www.programatv.lt/images/channels/03.png?v=1",
         name: "TV3",
       },
       { 
@@ -84,17 +85,23 @@ export default function App() {
     ]
   
     useEffect(() => {
-      if (synced) return
-  
+      if (updated) return
+
       const epg_text = localStorage['epg']
 
-      if (epg_text !== undefined) {
+      if (epg_text === undefined) {
+        fetchGuide()
+
+      } else {
         const parser = new DOMParser()
         const xml = parser.parseFromString(epg_text, "application/xml")
         const programs = xml.getElementsByTagName("programme")
         const now = new Date()
 
         let epg = {}
+        let count = 0
+
+        setItems(-1)
 
         for (let item = 0; item < programs.length; item++) {
           let channel = programs[item].getAttribute('channel') || ""
@@ -113,20 +120,27 @@ export default function App() {
             epg[channel].now = start.toLocaleTimeString().substring(0, 5) + " " + title
             epg[channel].progress = (now - start) * 100 / (stop - start)
             epg[channel].stop = stop
-            if (!found) setFound(true)
+            count ++
   
           } else if (start <= epg[channel].stop) 
             epg[channel].next = start.toLocaleTimeString().substring(0, 5) + " " + title
   
         }
-  
-        setGuide(epg)
+
+        if (count === 0 && !synced) {
+          fetchGuide()
+
+        } else {
+          setGuide(epg)
+          setItems(count)
+          
+        }
   
       }
   
-      setSynced(true)
+      setUpdated(true)
   
-    }, [synced, found])
+    }, [updated])
   
     useLayoutEffect(() => {
       document.addEventListener("visibilitychange", onVisibilityChange)
@@ -148,11 +162,14 @@ export default function App() {
   
     function fetchGuide() {
       fetch('https://api.codetabs.com/v1/proxy?quest=' + epg_link)
-      .then((res) => res.text())
+      .then(res => {
+        setSynced(true)
+        return res.text()
+      })
 
       .then(text => { 
         localStorage.setItem("epg", text)
-        setSynced(false)
+        setUpdated(false)
       })
 
       .catch(err => {
@@ -191,7 +208,7 @@ export default function App() {
       <>
         <header>TV programa <Label value={channels.length} /></header>
         <Channels list={myChannelsList} />
-        {!found && <Toast message={"EPG data not found!"} button={"Update"} action={fetchGuide} />}
+        {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={fetchGuide} />}
       </>
     )
 }
