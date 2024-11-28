@@ -148,7 +148,7 @@ export default function App() {
     })
   
     function onVisibilityChange() {
-      if (document.visibilityState === 'visible') setSynced(false)
+      if (document.visibilityState === 'visible') setUpdated(false)
     }
   
     function parseDate(d) {
