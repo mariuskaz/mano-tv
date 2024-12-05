@@ -24,7 +24,7 @@ export default function App() {
       }, 
       { 
         id: "TV3.lt",
-        url: "https://play.tv3.lt/lives",
+        url: "https://play.tv3.lt/lives/tv3-lt,live-2831094",
         logo: "https://www.programatv.lt/images/channels/03.png?v=1",
         name: "TV3",
       },
@@ -105,27 +105,33 @@ export default function App() {
 
         for (let item = 0; item < programs.length; item++) {
           let channel = programs[item].getAttribute('channel') || ""
-          let title = programs[item].getElementsByTagName("title")[0]?.childNodes[0].nodeValue || ""
+
+          if (channels.some(chn => chn.id == channel)) {
+            let title = programs[item].getElementsByTagName("title")[0]?.childNodes[0].nodeValue || ""
   
-          let start = parseDate(programs[item].getAttribute('start'))
-          start.setTime(start.getTime() + 2 * 60 * 60 * 1000)
-  
-          let stop = parseDate(programs[item].getAttribute('stop'))
-          stop.setTime(stop.getTime() + 2 * 60 * 60 * 1000)
-  
-          if (epg[channel] === undefined) 
-            epg[channel] = { now: "", stop: "", next: "", progress: 0 }
-  
-          if (start <= now && stop >= now) {
-            epg[channel].now = start.toLocaleTimeString().substring(0, 5) + " " + title
-            epg[channel].progress = (now - start) * 100 / (stop - start)
-            epg[channel].stop = stop
-            count ++
-  
-          } else if (start <= epg[channel].stop) 
-            epg[channel].next = start.toLocaleTimeString().substring(0, 5) + " " + title
-  
+            let start = parseDate(programs[item].getAttribute('start'))
+            start.setTime(start.getTime() + 2 * 60 * 60 * 1000)
+    
+            let stop = parseDate(programs[item].getAttribute('stop'))
+            stop.setTime(stop.getTime() + 2 * 60 * 60 * 1000)
+    
+            if (epg[channel] === undefined) 
+              epg[channel] = { now: "", stop: "", next: "", progress: 0 }
+    
+            if (start <= now && stop >= now) {
+              epg[channel].now = start.toLocaleTimeString().substring(0, 5) + " " + title
+              epg[channel].progress = (now - start) * 100 / (stop - start)
+              epg[channel].stop = stop
+              count ++
+    
+            } else if (start <= epg[channel].stop) 
+              epg[channel].next = start.toLocaleTimeString().substring(0, 5) + " " + title
+
+          }
+
         }
+
+        console.log(`${count} items found`)
 
         if (count === 0 && !synced) {
           fetchGuide()
