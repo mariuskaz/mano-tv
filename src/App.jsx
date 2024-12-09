@@ -139,9 +139,8 @@ export default function App() {
         } else {
           setGuide(epg)
           setItems(count)
-          
+
         }
-  
       }
   
       setUpdated(true)
@@ -201,19 +200,24 @@ export default function App() {
         </div>
       )
     }
+
+    const myChannelsList = channels.map( channel => {
+      return <Channel channel={channel} key={channel.id} />
+    })
   
     const Channels = ({ list }) => {
       return <div className='channels-list'>{list}</div>
     }
-  
-    const myChannelsList = channels.map( channel => {
-      return <Channel channel={channel} key={channel.id} />
-    })
+
+    const Loader = () => {
+      return <div className="loader"></div>
+    }
   
     return (
       <>
         <header>TV programa <Label value={channels.length} /></header>
         <Channels list={myChannelsList} />
+        {items == -1 && <Loader />}
         {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={fetchGuide} />}
       </>
     )
