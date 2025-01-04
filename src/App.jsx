@@ -7,7 +7,7 @@ export default function App() {
     const [synced, setSynced] = useState(false)
     const [items, setItems] = useState(-1)
   
-    const epg_link = 'https://www.bevy.be/bevyfiles/lithuania3.xml'
+    const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
   
     const channels = [
       { 
