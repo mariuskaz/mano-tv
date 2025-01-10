@@ -18,7 +18,7 @@ export default function App() {
       },
       { 
         id: "LNK.lt",
-        url: "https://lnk.lt/video-embed/ad1a0439-7a2c-47d8-80c8-cf9b6b6a2f76/lnk-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined", //"https://lnk.lt/tiesiogiai",
+        url: "https://lnk.lt/video-embed/ad1a0439-7a2c-47d8-80c8-cf9b6b6a2f76/lnk-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined",
         logo: "https://content.tvprograma.lt/logo/220x80_0_88847800_1536058587m.png",
         name: "LNK",
       }, 
@@ -30,7 +30,7 @@ export default function App() {
       },
       { 
         id: "BTV.lt",
-        url: "https://lnk.lt/tiesiogiai#btv",
+        url: "https://lnk.lt/video-embed/1327f096-ea77-41b6-9913-b4d848fa2058/btv-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined",
         logo: "https://content.tvprograma.lt/logo/220x80_0_99643600_1536832966m.png",
         name: "BTV",
       },
@@ -42,7 +42,7 @@ export default function App() {
       },
       { 
         id: "2TV.lt",
-        url: "https://lnk.lt/tiesiogiai#2tv",
+        url: "https://lnk.lt/video-embed/e1faa68a-70e5-4ead-80c3-05f88ff9c745/2tv-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined",
         logo: "https://content.tvprograma.lt/logo/220x80_0_88998600_1585550605m.png",
         name: "2TV",
       },
