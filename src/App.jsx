@@ -6,7 +6,8 @@ export default function App() {
     const [updated, setUpdated] = useState(false)
     const [synced, setSynced] = useState(false)
     const [items, setItems] = useState(-1)
-  
+    const [selectedChannelUrl, setSelectedChannelUrl] = useState(null)
+
     const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
   
     const channels = [
@@ -189,7 +190,7 @@ export default function App() {
   
     const Channel = ({ channel }) => {
       return (
-        <div className='channel' onClick={() => window.open(channel.url)}>  
+        <div className='channel' onClick={() => setSelectedChannelUrl(channel.url)}>  
           <div className='logo'><img src={channel.logo} alt="logo" />{channel.name}</div>
           <div className='content'>
             <div>{guide[channel.id]?.now}</div><progress className='progress' value={guide[channel.id]?.progress} max={100} /><div style={{color:'darkgrey'}}>{guide[channel.id]?.next}</div>
@@ -216,6 +217,12 @@ export default function App() {
         <Channels list={myChannelsList} />
         {items == -1 && <Loader />}
         {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={fetchGuide} />}
+        {selectedChannelUrl && ( 
+          <div className="iframe-container">
+            <button className="close-button" onClick={() => setSelectedChannelUrl(null)}>&#10006;</button> 
+            <iframe src={selectedChannelUrl} allowFullScreen></iframe>
+          </div>
+        )}
       </>
     )
 }
