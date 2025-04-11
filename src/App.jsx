@@ -108,12 +108,8 @@ export default function App() {
 
           if (channels.some(chn => chn.id == channel)) {
             let title = programs[item].getElementsByTagName("title")[0]?.childNodes[0].nodeValue || ""
-  
             let start = parseDate(programs[item].getAttribute('start'))
-            start.setTime(start.getTime() + 2 * 60 * 60 * 1000)
-    
             let stop = parseDate(programs[item].getAttribute('stop'))
-            stop.setTime(stop.getTime() + 2 * 60 * 60 * 1000)
     
             if (epg[channel] === undefined) 
               epg[channel] = { now: "", stop: "", next: "", progress: 0 }
@@ -161,8 +157,9 @@ export default function App() {
       month = d.substring(4, 6),
       day = d.substring(6, 8),
       h = d.substring(8, 10),
-      m = d.substring(10, 12)
-      return new Date(year, month - 1, day, h, m)
+      m = d.substring(10, 12),
+      offset = new Date().getTimezoneOffset() / 60
+      return new Date(year, month - 1, day, h - offset, m)
     }
   
     function fetchGuide() {
