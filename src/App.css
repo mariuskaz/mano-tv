@@ -152,14 +152,13 @@ header {
 
 .preview {
   position: fixed;
-  bottom: 5px;
-  right: 5px;
+  bottom: 10px;
+  right: 10px;
   width: 400px;
   aspect-ratio: 16/9;
   background:white;
-  border-top: 1px solid #ccc;
   object-fit: contain;
-  box-shadow: 0 0 5px #ccc;
+  box-shadow: 0 0 5px black;
   z-index: 1000;
   overflow:hidden;
 }
@@ -172,7 +171,10 @@ header {
 }
 
 .lrt {
-  margin-top:-80px;
+  margin-top:-95px;
+  margin-left:-20px;
+  height:calc(100% + 95px)!important;
+  width:calc(100% + 45px)!important;
 }
 
 
@@ -184,7 +186,6 @@ header {
     color: #CDCED2;
     font-family: Calibri;
     font-size: 22px;
-    font-weight:100;
     border:none;
     width: 32px;
     height: 32px;

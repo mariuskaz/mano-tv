@@ -219,7 +219,7 @@ export default function App() {
         {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={fetchGuide} />}
         {selectedChannelUrl && ( 
           <div className="preview">
-            <button className="close-button" onClick={() => setSelectedChannelUrl(null)}>&#10006;</button> 
+            <button className="close-button" onClick={() => setSelectedChannelUrl(null)}>&#10005;</button> 
             <iframe className={selectedChannelUrl.includes("lrt") ? "lrt" : ""} src={selectedChannelUrl} allowFullScreen></iframe>
           </div>
         )}
