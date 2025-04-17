@@ -141,7 +141,7 @@ export default function App() {
 
     useEffect(() => {
       const interval = setInterval(() => {
-        if (!selectedChannelUrl) setUpdated(false)
+        if (selectedChannelUrl === null) setUpdated(false)
       }, 10000);
     
       return () => clearInterval(interval); 
