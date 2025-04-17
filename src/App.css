@@ -178,17 +178,21 @@ header {
 }
 
 .close-button {
-    position: absolute;
-    top: 5px;
-    background:transparent;
-    color: whitesmoke;
-    font-family: Calibri;
-    font-size: 22px;
-    border:none;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    z-index: 1001;
+  position: absolute;
+  top: 5px;
+  background:transparent;
+  color: whitesmoke;
+  font-family: Calibri;
+  font-size: 22px;
+  border:none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close-button::before {
+  content: '\2715';
 }
 
 .close-button:hover {
