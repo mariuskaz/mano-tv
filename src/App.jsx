@@ -128,22 +128,25 @@ export default function App() {
 
         }
 
-        console.log(`${count} items found`)
+        if (count === 0 && !synced) return fetchGuide();
+        
+        setGuide(epg)
+        setItems(count)
 
-        if (count === 0 && !synced) {
-          fetchGuide()
-
-        } else {
-          setGuide(epg)
-          setItems(count)
-
-        }
       }
   
       setUpdated(true)
   
     }, [updated])
-  
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setUpdated(false)
+      }, 60000);
+    
+      return () => clearInterval(interval); 
+    },[updated])
+
     useLayoutEffect(() => {
       document.addEventListener("visibilitychange", onVisibilityChange)
       return () => document.removeEventListener("visibilitychange", onVisibilityChange)
