@@ -170,20 +170,18 @@ header {
   height: 280px;
 }
 
-.lrt {
+.lrt-content {
   margin-top:-95px;
   margin-left:-20px;
   height:calc(100% + 95px)!important;
   width:calc(100% + 45px)!important;
 }
 
-
 .close-button {
     position: absolute;
     top: 5px;
-    right: 5px;
     background:transparent;
-    color: #CDCED2;
+    color: whitesmoke;
     font-family: Calibri;
     font-size: 22px;
     border:none;
@@ -195,6 +193,14 @@ header {
 
 .close-button:hover {
     color:red
+}
+
+.left {
+  left:5px;
+}
+
+.right {
+  right:5px;
 }
 
 @keyframes fadeInAnimation {

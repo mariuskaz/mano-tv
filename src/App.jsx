@@ -214,8 +214,8 @@ export default function App() {
     const Preview = () => {
       return (
         <div className="preview">
-          <button className="close-button" onClick={() => setSelectedChannelUrl(null)}>&#10005;</button> 
-          <iframe className={selectedChannelUrl.includes("lrt") ? "lrt" : ""} src={selectedChannelUrl} allowFullScreen></iframe>
+          <button className={selectedChannelUrl.includes("lrt") ? "close-button left" : "close-button right"} onClick={() => setSelectedChannelUrl(null)}>&#10005;</button> 
+          <iframe className={selectedChannelUrl.includes("lrt") ? "lrt-content" : ""} src={selectedChannelUrl} allowFullScreen></iframe>
         </div>
       )
     }
