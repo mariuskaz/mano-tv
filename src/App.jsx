@@ -91,7 +91,7 @@ export default function App() {
       const epg_text = localStorage['epg']
 
       if (epg_text === undefined) {
-        fetchGuide()
+        return fetchGuide()
 
       } else {
         const parser = new DOMParser()
@@ -141,8 +141,8 @@ export default function App() {
 
     useEffect(() => {
       const interval = setInterval(() => {
-        setUpdated(false)
-      }, 60000);
+        if (!selectedChannelUrl) setUpdated(false)
+      }, 10000);
     
       return () => clearInterval(interval); 
     },[updated])
