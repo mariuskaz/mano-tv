@@ -55,7 +55,7 @@ export default function App() {
       },
       { 
         id: "Lietuvos ryto TV.lt",
-        url: "https://tv.lrytas.lt/live",
+        url: "https://tv.lrytas.lt/live/embed?autoplay=1",
         logo: "https://content.tvprograma.lt/logo/220x80_0_80098400_1538461908m.png",
         name: "Lietuvos rytas",
       },
