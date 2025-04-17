@@ -210,6 +210,15 @@ export default function App() {
     const Loader = () => {
       return <div className="loader"></div>
     }
+
+    const Preview = () => {
+      return (
+        <div className="preview">
+          <button className="close-button" onClick={() => setSelectedChannelUrl(null)}>&#10005;</button> 
+          <iframe className={selectedChannelUrl.includes("lrt") ? "lrt" : ""} src={selectedChannelUrl} allowFullScreen></iframe>
+        </div>
+      )
+    }
   
     return (
       <>
@@ -217,12 +226,7 @@ export default function App() {
         <Channels list={myChannelsList} />
         {items == -1 && <Loader />}
         {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={fetchGuide} />}
-        {selectedChannelUrl && ( 
-          <div className="preview">
-            <button className="close-button" onClick={() => setSelectedChannelUrl(null)}>&#10005;</button> 
-            <iframe className={selectedChannelUrl.includes("lrt") ? "lrt" : ""} src={selectedChannelUrl} allowFullScreen></iframe>
-          </div>
-        )}
+        {selectedChannelUrl && <Preview />}
       </>
     )
 }
