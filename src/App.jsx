@@ -139,13 +139,7 @@ export default function App() {
   
     }, [updated])
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        if (selectedChannelUrl === null) setUpdated(false)
-      }, 10000);
-    
-      return () => clearInterval(interval); 
-    },[updated])
+    useEffect(() => setUpdated(false), [selectedChannelUrl])
 
     useLayoutEffect(() => {
       document.addEventListener("visibilitychange", onVisibilityChange)
