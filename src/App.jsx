@@ -86,8 +86,6 @@ export default function App() {
     ]
   
     useEffect(() => {
-      if (updated) return
-
       const epg_text = localStorage['epg']
 
       if (epg_text === undefined) {
@@ -132,14 +130,11 @@ export default function App() {
         
         setGuide(epg)
         setItems(count)
+        setUpdated(true)
 
       }
   
-      setUpdated(true)
-  
-    }, [updated])
-
-    useEffect(() => setUpdated(false), [selectedChannelUrl])
+    }, [updated, selectedChannelUrl])
 
     useLayoutEffect(() => {
       document.addEventListener("visibilitychange", onVisibilityChange)
