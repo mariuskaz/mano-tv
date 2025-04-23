@@ -138,7 +138,7 @@ export default function App() {
 
     useEffect(() => {
       const interval = setInterval(() => {
-        if (!selectedChannelUrl) setUpdated(false)
+        if (!selectedChannelUrl && items > 0) setUpdated(false)
       }, 10_000)
     
       return () => clearInterval(interval)
@@ -207,7 +207,7 @@ export default function App() {
     }
 
     const Loader = () => {
-      return <div className="loader"></div>
+      return <div className="loader" />
     }
 
     const Preview = () => {
@@ -229,7 +229,7 @@ export default function App() {
         <header>TV programa <Label value={channels.length} /></header>
         <Channels list={myChannelsList} />
         {items == -1 && <Loader />}
-        {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={fetchGuide} />}
+        {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={()=>setUpdated(false)} />}
         {selectedChannelUrl && <Preview />}
       </>
     )
