@@ -219,6 +219,7 @@ export default function App() {
           <iframe 
             className={selectedChannelUrl.includes("lrt") ? "lrt-content" : ""} 
             src={selectedChannelUrl} 
+            scrolling="no"
             allowFullScreen />
         </div>
       )
