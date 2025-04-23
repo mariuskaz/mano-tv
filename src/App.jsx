@@ -134,7 +134,15 @@ export default function App() {
 
       }
   
-    }, [updated, selectedChannelUrl])
+    }, [updated, synced])
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        if (!selectedChannelUrl) setUpdated(false)
+      }, 10_000)
+    
+      return () => clearInterval(interval)
+    }, [selectedChannelUrl]);
 
     useLayoutEffect(() => {
       document.addEventListener("visibilitychange", onVisibilityChange)
@@ -142,7 +150,7 @@ export default function App() {
     })
   
     function onVisibilityChange() {
-      if (document.visibilityState === 'visible') setUpdated(false)
+      if (document.visibilityState === 'visible' && !selectedChannelUrl) setUpdated(false)
     }
   
     function parseDate(d) {
@@ -158,13 +166,12 @@ export default function App() {
     function fetchGuide() {
       fetch('https://api.codetabs.com/v1/proxy?quest=' + epg_link)
       .then(res => {
-        setSynced(true)
         return res.text()
       })
 
       .then(text => { 
         localStorage.setItem("epg", text)
-        setUpdated(false)
+        setSynced(true)
       })
 
       .catch(err => {

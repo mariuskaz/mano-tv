@@ -17,11 +17,11 @@ code {
   height: 76px;
   border-radius: 50%;
   display: inline-block;
-  border-top: 3px solid #666;
+  border-top: 3px solid indianred;
   border-right: 3px solid transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
-  position:absolute;
+  position:fixed;
   top:0;bottom:0;
   left:0;right:0;
   margin:auto;
