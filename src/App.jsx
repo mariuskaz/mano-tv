@@ -7,6 +7,7 @@ export default function App() {
     const [synced, setSynced] = useState(false)
     const [items, setItems] = useState(-1)
     const [selectedChannelUrl, setSelectedChannelUrl] = useState(null)
+    const [message, setMessage] = useState(null)
 
     const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
   
@@ -126,10 +127,15 @@ export default function App() {
 
         }
 
-        if (count === 0 && !synced) return fetchGuide();
+        if (count !== channels.length && !synced) return fetchGuide();
         
         setGuide(epg)
         setItems(count)
+
+        if (count === 0) setMessage("Error fetching EPG data!")
+        else if (count < channels.length) setMessage("EPG is outdated!")
+        else setMessage(null)
+
         setUpdated(true)
 
       }
@@ -223,7 +229,7 @@ export default function App() {
         <header>TV programa <Label value={channels.length} /></header>
         <Channels list={myChannelsList} />
         {items == -1 && <Loader />}
-        {items == 0 && <Toast message={"Error fetching EPG data!"} button={"Retry"} action={()=>setUpdated(false)} />}
+        {items !== channels.length && <Toast message={message} button={"Update"} action={() => setSynced(false)} />}
         {selectedChannelUrl && <Preview />}
       </>
     )
