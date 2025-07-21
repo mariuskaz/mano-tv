@@ -171,8 +171,9 @@ export default function App() {
 				epg[channelId].progress = ((now - start) * 100) / (stop - start)
 				epg[channelId].stop = stop
 				count++
-			} else if (start >= epg[channelId].stop) {
+			} else if (start >= now && (epg[channelId].nextStart === undefined || start < epg[channelId].nextStart)) {
 				epg[channelId].next = `${start.toLocaleTimeString().slice(0, 5)} ${title}`
+				epg[channelId].nextStart = start
 			}
 		}
 
