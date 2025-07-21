@@ -106,15 +106,6 @@ function Toast({ message, button, action }) {
 	)
 }
 
-function Preview({ url, onClose }) {
-	return (
-		<div className="preview">
-			<button className={url.includes("lrt") ? "close-button left" : "close-button right"} onClick={onClose} />
-			<iframe className={url.includes("lrt") ? "lrt-content" : ""} src={url} allowFullScreen />
-		</div>
-	)
-}
-
 function Channel({ channel, epg, onSelect }) {
 	const { now, progress, next } = epg[channel.id] || {}
 	return (
@@ -139,12 +130,25 @@ function Channels({ epg, onSelect }) {
 	)
 }
 
+function Preview({ url, onClose }) {
+	return (
+		<div className="preview">
+			<button className={url.includes("lrt") ? "close-button left" : "close-button right"} onClick={onClose} />
+			<iframe className={url.includes("lrt") ? "lrt-content" : ""} src={url} allowFullScreen />
+		</div>
+	)
+}
+
 export default function App() {
 	const [guide, setGuide] = useState({})
 	const [items, setItems] = useState(-1)
 	const [updated, setUpdated] = useState(false)
 	const [synced, setSynced] = useState(false)
 	const [selectedUrl, setSelectedUrl] = useState(null)
+
+	const isLoading = items === -1;
+	const hasError = items === 0;
+	const isOutdated = items > 0 && items < channels.length;
 
 	useEffect(() => {
 		const epgText = localStorage.getItem('epg')
@@ -171,6 +175,7 @@ export default function App() {
 				epg[channelId].progress = ((now - start) * 100) / (stop - start)
 				epg[channelId].stop = stop
 				count++
+				
 			} else if (start >= now && (epg[channelId].nextStart === undefined || start < epg[channelId].nextStart)) {
 				epg[channelId].next = `${start.toLocaleTimeString().slice(0, 5)} ${title}`
 				epg[channelId].nextStart = start
@@ -178,9 +183,11 @@ export default function App() {
 		}
 
 		if (count !== channels.length && !synced) return fetchGuide()
+
 		setGuide(epg)
 		setItems(count)
 		setUpdated(true)
+		
 	}, [updated, synced])
 
 	useLayoutEffect(() => {
@@ -208,9 +215,9 @@ export default function App() {
 		<header>TV programa <Label value={channels.length} /></header>
 		<Channels epg={guide} onSelect={setSelectedUrl} />
 		{selectedUrl && <Preview url={selectedUrl} onClose={() => setSelectedUrl(null)} />}
-		{items === -1 && <Loader />}
-		{items === 0 && <Toast message="Error fetching EPG data!" button="Retry" action={() => setSynced(false)} />}
-		{items > 0 && items < channels.length && <Toast message="EPG is outdated!" button="Update" action={() => setSynced(false)} />}
+		{isLoading && <Loader />}
+		{hasError && <Toast message="Error fetching EPG data!" button="Retry" action={() => setSynced(false)} />}
+		{isOutdated && <Toast message="EPG is outdated!" button="Update" action={() => setSynced(false)} />}
 	</>
 	)
 }
