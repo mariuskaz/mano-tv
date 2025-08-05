@@ -147,8 +147,8 @@ export default function App() {
 	const [selectedUrl, setSelectedUrl] = useState(null)
 
 	const isLoading = items === -1;
-	const hasError = items === 0;
-	const isOutdated = items > 0 && items < channels.length;
+	const hasError = items === 0 && synced;
+	const isOutdated = items > 0 && items < channels.length && synced;
 
 	useEffect(() => {
 		const epgText = localStorage.getItem('epg')
