@@ -10,72 +10,86 @@ const channels = [
     url: "https://www.lrt.lt/mediateka/tiesiogiai/lrt-televizija",
     logo: "https://www.lrt.lt/images/logo/logo-lrt.svg?v=673",
     name: "LRT",
+	preview: true,
+	delay: 1200,
   },
   {
     id: "LNK.lt",
     url: "https://lnk.lt/video-embed/ad1a0439-7a2c-47d8-80c8-cf9b6b6a2f76/lnk-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined",
     logo: "https://content.tvprograma.lt/logo/220x80_0_88847800_1536058587m.png",
     name: "LNK",
+	preview: true,
   },
   {
     id: "TV3.lt",
     url: "https://play.tv3.lt/lives/tv3-lt,live-2831094",
     logo: "https://www.programatv.lt/images/channels/03.png?v=1",
     name: "TV3",
+	preview: false,
   },
   {
     id: "BTV.lt",
     url: "https://lnk.lt/video-embed/1327f096-ea77-41b6-9913-b4d848fa2058/btv-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined",
     logo: "https://content.tvprograma.lt/logo/220x80_0_99643600_1536832966m.png",
     name: "BTV",
+	preview: true,
   },
   {
     id: "TV1.lt",
     url: "https://lnk.lt/tiesiogiai#tv1",
     logo: "https://content.tvprograma.lt/logo/220x80_0_50644700_1415689122m.png",
     name: "TV1",
+	preview: false,
   },
   {
     id: "2TV.lt",
     url: "https://lnk.lt/video-embed/e1faa68a-70e5-4ead-80c3-05f88ff9c745/2tv-hd-kanalas-internetu?muteOnStart=true&autoStart=true&startFrom=undefined",
     logo: "https://content.tvprograma.lt/logo/220x80_0_88998600_1585550605m.png",
     name: "2TV",
+	preview: true,
   },
   {
     id: "TV6.lt",
     url: "https://play.tv3.lt/live/tv6-lt,live-2838694",
     logo: "https://content.tvprograma.lt/logo/220x80_0_98820800_1665328884m.jpg",
     name: "TV6",
+	preview: false,
   },
   {
     id: "Lietuvos ryto TV.lt",
     url: "https://www.lietuvosryto.tv/eteris",
     logo: "https://content.tvprograma.lt/logo/220x80_0_80098400_1538461908m.png",
     name: "Lietuvos rytas",
+	preview: false,
   },
   {
     id: "LRT Plius.lt",
     url: "https://www.lrt.lt/mediateka/tiesiogiai/lrt-plius",
     logo: "https://content.tvprograma.lt/logo/220x80_0_91824600_1652106605m.jpg",
     name: "LRT PLIUS",
+	preview: true,
+	delay: 1200,
   },
   {
     id: "Info TV.lt",
     url: "https://lnk.lt/tiesiogiai#infotv",
     logo: "https://content.tvprograma.lt/logo/220x80_0_34085600_1418495360m.png",
     name: "Info TV",
+	preview: false,
   },
   {
     id: "Delfi TV.lt",
     url: "https://www.delfi.lt/video/puslapis/tv",
     logo: "https://content.tvprograma.lt/logo/220x80_0_11928400_1633001331m.png",
     name: "Delfi",
+	preview: false,
   },
   {
     id: "TV3 Plus.lt",
     url: "https://play.tv3.lt/show/tv3-plus,live-4929289",
     logo: "https://content.tvprograma.lt/logo/220x80_0_37190500_1654152447m.png",
     name: "TV3 PLUS",
+	preview: false,
   },
 ]
 
@@ -107,17 +121,25 @@ function Toast({ message, button, action }) {
 }
 
 function Channel({ channel, epg, onSelect }) {
-	const { now, progress, next } = epg[channel.id] || {}
-	return (
-		<div className='channel' onClick={() => onSelect(channel.url)}>
-			<div className='logo'><img src={channel.logo} alt="logo" />{channel.name}</div>
-			<div className='content'>
-				<div>{now}</div>
-				<progress className='progress' value={progress} max={100} />
-				<div style={{ color: 'darkgrey' }}>{next}</div>
-			</div>
-		</div>
-	)
+    const { now, progress, next } = epg[channel.id] || {}
+    const handleClick = () => {
+        if (channel.preview === false) {
+			onSelect(null)
+            window.open(channel.url, '_blank', 'noopener, noreferrer')
+        } else {
+            onSelect(channel.url)
+        }
+    }
+    return (
+        <div className='channel' onClick={handleClick}>
+            <div className='logo'><img src={channel.logo} alt="logo" />{channel.name}</div>
+            <div className='content'>
+                <div>{now}</div>
+                <progress className='progress' value={progress} max={100} />
+                <div style={{ color: 'darkgrey' }}>{next}</div>
+            </div>
+        </div>
+    )
 }
 
 function Channels({ epg, onSelect }) {
@@ -131,12 +153,28 @@ function Channels({ epg, onSelect }) {
 }
 
 function Preview({ url, onClose }) {
-	return (
-		<div className="preview">
-			<button className={url.includes("lrt") ? "close-button left" : "close-button right"} onClick={onClose} />
-			<iframe className={url.includes("lrt") ? "lrt-content" : ""} src={url} allowFullScreen />
-		</div>
-	)
+	const [visible, setVisible] = useState(true)
+    const channel = channels.find(c => c.url === url)
+    const delay = channel?.delay || 0
+
+	const style = { 
+		visibility: visible ? 'visible' : 'hidden',
+	}
+
+    useEffect(() => {
+        if (delay > 0) {
+			setVisible(false)
+            const timer = setTimeout(() => setVisible(true), delay)
+            return () => clearTimeout(timer)
+        }
+    }, [url, delay])
+
+    return (
+        <div className="preview">
+            <button className={url.includes("lrt") ? "close-button left" : "close-button right"} onClick={onClose} />
+			<iframe className={url.includes("lrt") ? "lrt-content" : ""} style={style} src={url} allowFullScreen />
+        </div>
+    )
 }
 
 export default function App() {

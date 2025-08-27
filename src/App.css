@@ -152,6 +152,7 @@ header {
 
 .preview {
   position: fixed;
+  background: black!important;
   bottom: 10px;
   right: 10px;
   width: 460px;
