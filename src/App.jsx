@@ -11,7 +11,7 @@ const channels = [
     logo: "https://www.lrt.lt/images/logo/logo-lrt.svg?v=673",
     name: "LRT",
 	preview: true,
-	delay: 1200,
+	delay: 2000,
   },
   {
     id: "LNK.lt",
@@ -68,7 +68,7 @@ const channels = [
     logo: "https://content.tvprograma.lt/logo/220x80_0_91824600_1652106605m.jpg",
     name: "LRT PLIUS",
 	preview: true,
-	delay: 1200,
+	delay: 2000,
   },
   {
     id: "Info TV.lt",
