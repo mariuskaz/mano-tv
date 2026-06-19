@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './App.css'
 
 const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
-const proxy_url = `https://api.codetabs.com/v1/proxy?quest=${epg_link}`
+const proxy_url = `https://api.cors.lol/?url=${epg_link}`
 
 const channels = [
   {
