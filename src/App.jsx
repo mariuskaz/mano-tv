@@ -2,7 +2,12 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './App.css'
 
 const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
-const proxy_url = `https://api.cors.lol/?url=${epg_link}`
+
+export function buildProxyUrl(targetUrl) {
+    return `/api/proxy?url=${encodeURIComponent(targetUrl)}`
+}
+
+const proxy_url = buildProxyUrl(epg_link)
 
 const channels = [
   {
