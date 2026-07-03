@@ -150,64 +150,6 @@ header {
   cursor: pointer;
 }
 
-.preview {
-  position: fixed;
-  background: black!important;
-  bottom: 10px;
-  right: 10px;
-  width: 460px;
-  aspect-ratio: 16/9;
-  background:white;
-  object-fit: contain;
-  box-shadow: 0 0 5px black;
-  z-index: 1000;
-  overflow:hidden;
-}
-
-
-.preview iframe {
-  border: none;
-  width: 100%;
-  height: 280px;
-  overflow: hidden;
-}
-
-.lrt-content {
-  margin-top:-82px;
-  margin-left:-15px;
-  height:calc(100% + 95px)!important;
-  width:calc(100% + 45px)!important;
-}
-
-.close-button {
-  position: absolute;
-  top: 5px;
-  background:transparent;
-  color: whitesmoke;
-  font-family: Calibri;
-  font-size: 22px;
-  border:none;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.close-button::before {
-  content: '\2715';
-}
-
-.close-button:hover {
-    color:red
-}
-
-.left {
-  left:5px;
-}
-
-.right {
-  right:5px;
-}
 
 @keyframes fadeInAnimation {
   0% { opacity: 1; bottom: -100px; }
@@ -228,7 +170,5 @@ header {
 }
 
 @media only screen and (max-width: 768px) {
-  .preview {
-    width: 80vw;
-  }
+  /* no preview styles */
 }
