@@ -18,7 +18,7 @@ export function parseDate(d) {
 	return new Date(year, month - 1, day, h - offset, m)
 }
 
-function Label({ value }) {
+function Label({value}) {
 	return <span className='float-label'>{value}</span>
 }
 
@@ -26,7 +26,7 @@ function Loader() {
 	return <div className="loader" />
 }
 
-function Toast({ message, button, action }) {
+function Toast({message, button, action}) {
 	return (
 		<div className='toast'>
 			{message}
@@ -35,11 +35,9 @@ function Toast({ message, button, action }) {
 	)
 }
 
-function Channel({ channel, epg }) {
+function Channel({channel, epg}) {
     const { now, progress, next } = epg[channel.id] || {}
-    const handleClick = () => {
-        window.open(channel.url, '_blank', 'noopener, noreferrer')
-    }
+    const handleClick = () => window.open(channel.url, '_blank', 'noopener, noreferrer')
     return (
         <div className='channel' onClick={handleClick}>
             <div className='logo'><img src={channel.logo} alt="logo" />{channel.name}</div>
@@ -52,7 +50,7 @@ function Channel({ channel, epg }) {
     )
 }
 
-function Channels({ epg }) {
+function Channels({epg}) {
 	return (
 		<div className='channels-list'>
 			{channels.map(channel => (
@@ -71,6 +69,18 @@ export default function App() {
 	const isLoading = items === -1;
 	const hasError = items === 0 && synced;
 	const isOutdated = items > 0 && items < channels.length && synced;
+
+	const fetchGuide = async () => {
+		try {
+			const res = await fetch(buildProxyUrl(epg_link))
+			const text = await res.text()
+			localStorage.setItem("epg", text)
+			setSynced(true)
+		} catch (err) {
+			console.error("EPG fetch error:", err)
+			setItems(0)
+		}
+  	}
 
 	useEffect(() => {
 		const epgText = localStorage.getItem('epg')
@@ -117,18 +127,6 @@ export default function App() {
 		document.addEventListener("visibilitychange", handler)
 		return () => document.removeEventListener("visibilitychange", handler)
 	}, [])
-
-  const fetchGuide = async () => {
-    try {
-      const res = await fetch(buildProxyUrl(epg_link))
-      const text = await res.text()
-      localStorage.setItem("epg", text)
-      setSynced(true)
-    } catch (err) {
-      console.error("EPG fetch error:", err)
-      setItems(0)
-    }
-  }
 
 	return (
         <>
