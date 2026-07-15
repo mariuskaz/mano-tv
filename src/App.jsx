@@ -76,6 +76,7 @@ export default function App() {
 			const text = await res.text()
 			localStorage.setItem("epg", text)
 			setSynced(true)
+			setUpdated(false)
 		} catch (err) {
 			console.error("EPG fetch error:", err)
 			setItems(0)
@@ -84,42 +85,51 @@ export default function App() {
 
 	useEffect(() => {
 		const epgText = localStorage.getItem('epg')
-		if (!epgText) return fetchGuide()
 
-		const parser = new DOMParser()
-		const xml = parser.parseFromString(epgText, "application/xml")
-		const programs = xml.getElementsByTagName("programme")
-		const now = new Date()
-		let epg = {}, count = 0
-
-		for (let program of programs) {
-			const channelId = program.getAttribute("channel")
-			if (!channels.find(c => c.id === channelId)) continue
-
-			const start = parseDate(program.getAttribute("start"))
-			const stop = parseDate(program.getAttribute("stop"))
-			const title = program.getElementsByTagName("title")[0]?.textContent || ""
-
-			if (!epg[channelId]) epg[channelId] = { now: "", stop: new Date(0), next: "", progress: 0 }
-
-			if (start <= now && stop >= now) {
-				epg[channelId].now = `${start.toLocaleTimeString().slice(0, 5)} ${title}`
-				epg[channelId].progress = ((now - start) * 100) / (stop - start)
-				epg[channelId].stop = stop
-				count++
-				
-			} else if (start >= now && (epg[channelId].nextStart === undefined || start < epg[channelId].nextStart)) {
-				epg[channelId].next = `${start.toLocaleTimeString().slice(0, 5)} ${title}`
-				epg[channelId].nextStart = start
+		const loadGuide = async () => {
+			if (!epgText) {
+				await fetchGuide()
+				return
 			}
+
+			const parser = new DOMParser()
+			const xml = parser.parseFromString(epgText, "application/xml")
+			const programs = xml.getElementsByTagName("programme")
+			const now = new Date()
+			let epg = {}, count = 0
+
+			for (let program of programs) {
+				const channelId = program.getAttribute("channel")
+				if (!channels.find(c => c.id === channelId)) continue
+
+				const start = parseDate(program.getAttribute("start"))
+				const stop = parseDate(program.getAttribute("stop"))
+				const title = program.getElementsByTagName("title")[0]?.textContent || ""
+
+				if (!epg[channelId]) epg[channelId] = { now: "", stop: new Date(0), next: "", progress: 0 }
+
+				if (start <= now && stop >= now) {
+					epg[channelId].now = `${start.toLocaleTimeString().slice(0, 5)} ${title}`
+					epg[channelId].progress = ((now - start) * 100) / (stop - start)
+					epg[channelId].stop = stop
+					count++
+				} else if (start >= now && (epg[channelId].nextStart === undefined || start < epg[channelId].nextStart)) {
+					epg[channelId].next = `${start.toLocaleTimeString().slice(0, 5)} ${title}`
+					epg[channelId].nextStart = start
+				}
+			}
+
+			if (count !== channels.length && !synced) {
+				await fetchGuide()
+				return
+			}
+
+			setGuide(epg)
+			setItems(count)
+			setUpdated(true)
 		}
 
-		if (count !== channels.length && !synced) return fetchGuide()
-
-		setGuide(epg)
-		setItems(count)
-		setUpdated(true)
-		
+		void loadGuide()
 	}, [updated, synced])
 
 	useLayoutEffect(() => {
