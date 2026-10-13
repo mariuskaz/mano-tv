@@ -1,5 +1,5 @@
 body {
-  background:whitesmoke;
+  background:#f4f7fb;
 }
 
 progress::-webkit-progress-bar {
@@ -12,9 +12,9 @@ progress::-webkit-progress-value {
 
 header { 
   padding:15px;
-  background:whitesmoke;
+  background:#f4f7fb;
   font-size:1.4rem;
-  color:gray
+  color:black
 }
 
 .channels-list {
@@ -79,13 +79,12 @@ header {
 .float-label {
   padding:4px 6px;
   text-decoration:none;
-  background:#e7e7e7;
-  color:gray;
+  background:#e5f1ff;
+  color:#1680ff;
   border-radius:4px;
   vertical-align:middle;
   text-align: center;
   font-size:10pt;
-  color:gray;
   height:20px;
   line-height:20px;
 }
