@@ -17,6 +17,28 @@ header {
   color:black
 }
 
+.now-showing {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin:0 15px 15px;
+  padding:8px 14px;
+  background:#e5f1ff;
+  color:#1680ff;
+  border-radius:20px;
+  font-size:0.7rem;
+  font-weight:600;
+}
+
+.now-showing svg {
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
 .channels-list {
   display:flex;
   flex-direction:row;
