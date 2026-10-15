@@ -10,18 +10,20 @@ progress::-webkit-progress-value {
   background-color: #2ad!important;
 }
 
-header { 
-  padding:15px;
+header {
+  padding:20px 24px 4px;
   background:#f4f7fb;
-  font-size:1.4rem;
-  color:black
+  color:#171b43;
+  font-size:1.6rem;
+  line-height:1.2;
+  font-weight:700;
 }
 
 .now-showing {
   display:inline-flex;
   align-items:center;
   gap:8px;
-  margin:0 15px 15px;
+  margin:14px 24px 18px;
   padding:8px 14px;
   background:#e5f1ff;
   color:#1680ff;
@@ -45,7 +47,8 @@ header {
   flex-wrap:wrap;
   align-content:center;
   justify-content:flex-start;
-  margin:2px;
+  gap:5px;
+  padding:0 8px 12px;
 }
 
 .channel {
@@ -58,10 +61,11 @@ header {
   align-items:center;
   cursor:pointer;
   background:white;
-  margin:2px;
+  margin:0;
   border-radius:8px;
   width:100%;
-  height:120px;
+  height:140px;
+  box-sizing:border-box;
   overflow:hidden;
 }
 
@@ -101,9 +105,9 @@ header {
 .float-label {
   padding:4px 6px;
   text-decoration:none;
-  background:#e7e7e7;
-  color:gray;
-  border-radius:4px;
+  background:#e5f1ff;
+  color:#1680ff;
+  border-radius:8px;
   vertical-align:middle;
   text-align: center;
   font-size:10pt;
@@ -180,13 +184,13 @@ header {
 
 @media only screen and (min-width: 768px) {
   .channel {
-    width:calc(50% - 15px);
+    width:calc((100% - 5px) / 2);
   }
 }
 
 @media only screen and (min-width: 1024px) {
   .channel {
-    width:calc(33.3% - 15px);
+    width:calc((100% - 10px) / 3);
   }
 }
 
