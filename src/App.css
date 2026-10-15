@@ -14,21 +14,21 @@ header {
   padding:20px 24px 4px;
   background:#f4f7fb;
   color:#171b43;
-  font-size:1.6rem;
+  font-size:1.5rem;
   line-height:1.2;
-  font-weight:700;
+  font-weight:600;
 }
 
 .now-showing {
   display:inline-flex;
   align-items:center;
   gap:8px;
-  margin:14px 24px 18px;
+  margin:6px 24px 24px;
   padding:8px 14px;
   background:#e5f1ff;
   color:#1680ff;
   border-radius:20px;
-  font-size:0.9rem;
+  font-size:0.8rem;
   font-weight:600;
 }
 
