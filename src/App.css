@@ -76,6 +76,11 @@ header {
 }
 
 .logo {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  align-self:stretch;
   color:#2ad;
   margin:5px 10px;
   font-weight:normal;
@@ -83,6 +88,8 @@ header {
   vertical-align:middle;
   text-align: center;
   width: 50px;
+  padding-right:10px;
+  border-right:1px solid #e3e8ef;
 }
 
 .logo img {
