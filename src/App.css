@@ -13,7 +13,8 @@ progress::-webkit-progress-value {
 header {
   padding:20px 24px 4px;
   background:#f4f7fb;
-  color:#171b43;
+  /* color:#171b43; */
+  color:dimgray;
   font-size:1.5rem;
   line-height:1.2;
   font-weight:600;
