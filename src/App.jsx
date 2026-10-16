@@ -103,13 +103,9 @@ function GamesGroup({title, games, loading}) {
 }
 
 function UpcomingGames({games, loading}) {
-	const euroleagueGames = games.filter(game => game.league === 'Eurolyga').slice(0, 6)
-	const lklGames = games.filter(game => game.league === 'LKL').slice(0, 6)
-
 	return (
 		<div className='upcoming-games'>
-			<GamesGroup title='Artimiausios Eurolygos rungtynės' games={euroleagueGames} loading={loading} />
-			<GamesGroup title='Artimiausios LKL rungtynės' games={lklGames} loading={loading} />
+			<GamesGroup title='Artimiausios rungtynės' games={games.slice(0, 6)} loading={loading} />
 		</div>
 	)
 }
