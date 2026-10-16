@@ -3,8 +3,8 @@
   "name": "Mano TV",
   "icons": [
     {
-      "src": "favicon.png",
-      "sizes": "64x64",
+      "src": "favicon.svg",
+      "sizes": "any",
       "type": "image/png"
     },
     {
