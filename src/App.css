@@ -198,11 +198,11 @@ header {
 }
 
 .games-section {
+  width:100%;
   margin:0;
-  padding:20px;
-  border-radius:10px;
-  background:#fff;
-  box-shadow:0 0 5px #ccc;
+  padding:0;
+  box-sizing:border-box;
+  background:transparent;
 }
 
 .games-heading {
@@ -241,7 +241,7 @@ header {
   padding:13px 14px;
   border:1px solid #e6ebf2;
   border-radius:8px;
-  background:#fafcff;
+  background:white;
 }
 
 .game-meta {
