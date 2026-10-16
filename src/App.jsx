@@ -60,8 +60,63 @@ function Channels({epg}) {
 	)
 }
 
+const gameDateFormatter = new Intl.DateTimeFormat('lt-LT', {
+	weekday: 'short',
+	month: 'short',
+	day: 'numeric',
+	hour: '2-digit',
+	minute: '2-digit',
+})
+
+function isBasketballBroadcast(title, description, category) {
+	const text = `${title} ${description} ${category}`
+	const league = /(eurolyga|euroleague|\blkl\b|lietuvos krepšinio lyga|betsafe[- ]?lkl|betsson[- ]?lkl)/i
+	const review = /(apžvalga|žurnalas|magazinas|studija|dienoraštis|savaitė|top 10)/i
+	return league.test(text) && !review.test(title)
+}
+
+function GamesGroup({title, games, loading}) {
+	return (
+		<section className='games-section'>
+			<div className='games-heading'>
+				<span className='basketball-icon' aria-hidden='true'>●</span>
+				<h2>{title}</h2>
+			</div>
+			{games.length > 0 ? (
+				<div className='games-list'>
+					{games.map(game => (
+						<article className='game-card' key={`${game.channelId}-${game.start.toISOString()}-${game.title}`}>
+							<div className='game-meta'>
+								<span className='game-league'>{game.league}</span>
+								<time dateTime={game.start.toISOString()}>{gameDateFormatter.format(game.start)}</time>
+							</div>
+							<div className='game-title'>{game.title}</div>
+							<div className='game-channel'>{game.channelName}</div>
+						</article>
+					))}
+				</div>
+			) : !loading ? (
+				<p className='games-empty'>Artimiausioje TV programoje rungtynių nerasta.</p>
+			) : null}
+		</section>
+	)
+}
+
+function UpcomingGames({games, loading}) {
+	const euroleagueGames = games.filter(game => game.league === 'Eurolyga').slice(0, 6)
+	const lklGames = games.filter(game => game.league === 'LKL').slice(0, 6)
+
+	return (
+		<div className='upcoming-games'>
+			<GamesGroup title='Artimiausios Eurolygos rungtynės' games={euroleagueGames} loading={loading} />
+			<GamesGroup title='Artimiausios LKL rungtynės' games={lklGames} loading={loading} />
+		</div>
+	)
+}
+
 export default function App() {
 	const [guide, setGuide] = useState({})
+	const [games, setGames] = useState([])
 	const [items, setItems] = useState(-1)
 	const [updated, setUpdated] = useState(false)
 	const [synced, setSynced] = useState(false)
@@ -96,7 +151,7 @@ export default function App() {
 			const xml = parser.parseFromString(epgText, "application/xml")
 			const programs = xml.getElementsByTagName("programme")
 			const now = new Date()
-			let epg = {}, count = 0
+			let epg = {}, count = 0, upcomingGames = []
 
 			for (let program of programs) {
 				const channelId = program.getAttribute("channel")
@@ -105,6 +160,20 @@ export default function App() {
 				const start = parseDate(program.getAttribute("start"))
 				const stop = parseDate(program.getAttribute("stop"))
 				const title = program.getElementsByTagName("title")[0]?.textContent || ""
+				const description = program.getElementsByTagName("desc")[0]?.textContent || ""
+				const category = program.getElementsByTagName("category")[0]?.textContent || ""
+				const horizon = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000)
+
+				if (start >= now && start <= horizon && isBasketballBroadcast(title, description, category)) {
+					const channel = channels.find(c => c.id === channelId)
+					upcomingGames.push({
+						channelId,
+						channelName: channel?.name || channelId,
+						start,
+						title,
+						league: /\blkl\b|lietuvos krepšinio lyga|betsafe[- ]?lkl|betsson[- ]?lkl/i.test(`${title} ${description}`) ? 'LKL' : 'Eurolyga',
+					})
+				}
 
 				if (!epg[channelId]) epg[channelId] = { now: "", stop: new Date(0), next: "", progress: 0 }
 
@@ -125,6 +194,8 @@ export default function App() {
 			}
 
 			setGuide(epg)
+			upcomingGames.sort((a, b) => a.start - b.start)
+			setGames(upcomingGames)
 			setItems(count)
 			setUpdated(true)
 		}
@@ -149,6 +220,7 @@ export default function App() {
                 <span>Dabar rodoma</span>
             </div>
             <Channels epg={guide} />
+            <UpcomingGames games={games} loading={isLoading} />
             {isLoading && <Loader />}
             {hasError && <Toast message="Error fetching EPG data!" button="Retry" action={() => setSynced(false)} />}
             {isOutdated && <Toast message="EPG is outdated!" button="Update" action={() => setSynced(false)} />}
