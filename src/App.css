@@ -298,5 +298,16 @@ header {
 }
 
 @media only screen and (max-width: 768px) {
-  /* no preview styles */
+  .upcoming-games {
+    grid-template-columns:1fr;
+    width:auto;
+    margin-left:8px;
+    margin-right:8px;
+  }
+
+  .games-section,
+  .game-card {
+    width:100%;
+    box-sizing:border-box;
+  }
 }
