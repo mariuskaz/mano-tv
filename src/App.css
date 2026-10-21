@@ -7,7 +7,7 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background-color: #2ad!important;
+  background-color:#1680ff!important;
 }
 
 header {
@@ -82,7 +82,7 @@ header {
   align-items:center;
   justify-content:center;
   align-self:stretch;
-  color:#2ad;
+  color:#1680ff;
   margin:5px 10px;
   font-weight:normal;
   font-size:.8rem;
