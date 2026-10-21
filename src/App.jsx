@@ -24,6 +24,11 @@ export function parseDate(d) {
 	return new Date(year, month - 1, day, h - offset, m)
 }
 
+function decodeHtmlEntities(value) {
+	const document = new DOMParser().parseFromString(value, 'text/html')
+	return document.documentElement.textContent || ''
+}
+
 function Label({value}) {
 	return <span className='float-label'>{value}</span>
 }
@@ -260,7 +265,8 @@ export default function App() {
 					const text = await response.text()
 					const xml = new DOMParser().parseFromString(text, 'application/xml')
 					return Array.from(xml.getElementsByTagName('item')).map(item => {
-						const title = item.getElementsByTagName('title')[0]?.textContent?.trim() || ''
+						const rawTitle = item.getElementsByTagName('title')[0]?.textContent?.trim() || ''
+						const title = decodeHtmlEntities(rawTitle)
 						const rssLink = item.getElementsByTagName('link')[0]?.textContent?.trim() || ''
 						const guid = item.getElementsByTagName('guid')[0]?.textContent?.trim() || ''
 						const link = feed.source === 'DELFI'
