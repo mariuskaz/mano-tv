@@ -223,12 +223,29 @@ header {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:25px;
-  height:25px;
+  width:24px;
+  height:24px;
+  flex:none;
   border-radius:50%;
   background:#e5f1ff;
-  color:#1680ff;
-  font-size:0.75rem;
+}
+
+.pulse-dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#1680ff;
+  animation:pulse-dot 1.8s ease-out infinite;
+}
+
+@keyframes pulse-dot {
+  0% { box-shadow:0 0 0 0 rgba(22, 128, 255, 0.45); }
+  70% { box-shadow:0 0 0 7px rgba(22, 128, 255, 0); }
+  100% { box-shadow:0 0 0 0 rgba(22, 128, 255, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot { animation:none; }
 }
 
 .games-list {

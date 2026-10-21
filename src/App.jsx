@@ -79,7 +79,7 @@ function GamesGroup({title, games, loading}) {
 	return (
 		<section className='games-section'>
 			<div className='games-heading'>
-				<span className='basketball-icon' aria-hidden='true'>●</span>
+				<span className='basketball-icon' aria-hidden='true'><span className='pulse-dot' /></span>
 				<h2>{title}</h2>
 			</div>
 			{games.length > 0 ? (
