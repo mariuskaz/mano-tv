@@ -3,6 +3,7 @@ import './App.css'
 import { channels } from './channels'
 
 const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
+const news_link = 'https://www.lrt.lt/?rss='
 
 export function buildProxyUrl(targetUrl) {
     return `/api/proxy?url=${encodeURIComponent(targetUrl)}`
@@ -110,9 +111,49 @@ function UpcomingGames({games, loading}) {
 	)
 }
 
+const newsDateFormatter = new Intl.DateTimeFormat('lt-LT', {
+	month: 'short',
+	day: 'numeric',
+	hour: '2-digit',
+	minute: '2-digit',
+})
+
+function NewsSection({news, status}) {
+	return (
+		<section className='news-section'>
+			<div className='news-heading'>
+				<span className='news-icon' aria-hidden='true'>
+					<svg viewBox='0 0 24 24'>
+						<path d='M5 4h14v16H5zM8 8h8M8 12h8M8 16h5' />
+					</svg>
+				</span>
+				<h2>Naujausios žinios</h2>
+			</div>
+			{news.length > 0 ? (
+				<div className='news-list'>
+					{news.map(item => (
+						<a className='news-card' href={item.link} target='_blank' rel='noopener noreferrer' key={item.link}>
+							<div className='news-meta'>
+								<span className='news-source'>LRT</span>
+								{item.publishedAt && <time dateTime={item.publishedAt.toISOString()}>{newsDateFormatter.format(item.publishedAt)}</time>}
+							</div>
+							<div className='news-title'>{item.title}</div>
+						</a>
+					))}
+				</div>
+			) : status === 'error' ? (
+				<p className='news-empty'>Naujienų šiuo metu nepavyko gauti.</p>
+			) : status === 'ready' ? (
+				<p className='news-empty'>Naujienų nerasta.</p>
+			) : null}
+		</section>
+	)
+}
 export default function App() {
 	const [guide, setGuide] = useState({})
 	const [games, setGames] = useState([])
+	const [news, setNews] = useState([])
+	const [newsStatus, setNewsStatus] = useState('loading')
 	const [items, setItems] = useState(-1)
 	const [updated, setUpdated] = useState(false)
 	const [synced, setSynced] = useState(false)
@@ -199,6 +240,39 @@ export default function App() {
 		void loadGuide()
 	}, [updated, synced])
 
+	useEffect(() => {
+		let active = true
+
+		const loadNews = async () => {
+			try {
+				const response = await fetch(buildProxyUrl(news_link))
+				if (response.ok === false) throw new Error(`News request failed: ${response.status}`)
+				const text = await response.text()
+				const xml = new DOMParser().parseFromString(text, 'application/xml')
+				const items = Array.from(xml.getElementsByTagName('item'))
+					.map(item => {
+						const title = item.getElementsByTagName('title')[0]?.textContent?.trim() || ''
+						const link = item.getElementsByTagName('link')[0]?.textContent?.trim() || ''
+						const published = item.getElementsByTagName('pubDate')[0]?.textContent?.trim()
+						const publishedAt = published ? new Date(published) : null
+						return { title, link, publishedAt: publishedAt && !Number.isNaN(publishedAt.getTime()) ? publishedAt : null }
+					})
+					.filter(item => item.title && item.link)
+					.slice(0, 4)
+
+				if (active) {
+					setNews(items)
+					setNewsStatus('ready')
+				}
+			} catch (error) {
+				console.error('News fetch error:', error)
+				if (active) setNewsStatus('error')
+			}
+		}
+
+		void loadNews()
+		return () => { active = false }
+	}, [])
 	useLayoutEffect(() => {
 		const handler = () => document.visibilityState === 'visible' && setUpdated(false)
 		document.addEventListener("visibilitychange", handler)
@@ -216,6 +290,7 @@ export default function App() {
                 <span>Dabar rodoma</span>
             </div>
             <Channels epg={guide} />
+            <NewsSection news={news} status={newsStatus} />
             <UpcomingGames games={games} loading={isLoading} />
             {isLoading && <Loader />}
             {hasError && <Toast message="Error fetching EPG data!" button="Retry" action={() => setSynced(false)} />}
