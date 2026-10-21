@@ -129,7 +129,8 @@ function NewsSection({news, status}) {
 			<div className='news-heading'>
 				<span className='news-icon' aria-hidden='true'>
 					<svg viewBox='0 0 24 24'>
-						<path d='M5 4h14v16H5zM8 8h8M8 12h8M8 16h5' />
+						<circle cx='6' cy='18' r='1.5' />
+						<path d='M5 11a8 8 0 0 1 8 8M5 5a14 14 0 0 1 14 14' />
 					</svg>
 				</span>
 				<h2>Naujausios žinios</h2>
