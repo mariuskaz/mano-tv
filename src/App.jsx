@@ -311,7 +311,15 @@ export default function App() {
 		}
 
 		void loadNews()
-		return () => { active = false }
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') void loadNews()
+		}
+		document.addEventListener('visibilitychange', handleVisibilityChange)
+
+		return () => {
+			active = false
+			document.removeEventListener('visibilitychange', handleVisibilityChange)
+		}
 	}, [])
 	useLayoutEffect(() => {
 		const handler = () => document.visibilityState === 'visible' && setUpdated(false)
