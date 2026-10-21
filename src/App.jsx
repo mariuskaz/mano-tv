@@ -3,7 +3,12 @@ import './App.css'
 import { channels } from './channels'
 
 const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
-const news_link = 'https://www.lrt.lt/?rss='
+const newsFeeds = [
+	{ source: 'LRT', url: 'https://www.lrt.lt/?rss=' },
+	{ source: 'DELFI', url: 'https://feed.delfi.lt/v2/channel/global-lt?format=rss' },
+	{ source: 'lrytas.lt', url: 'https://www.lrytas.lt/rss' },
+	{ source: '15min', url: 'https://www.15min.lt/rss' },
+]
 
 export function buildProxyUrl(targetUrl) {
     return `/api/proxy?url=${encodeURIComponent(targetUrl)}`
@@ -133,11 +138,14 @@ function NewsSection({news, status}) {
 				<div className='news-list'>
 					{news.map(item => (
 						<a className='news-card' href={item.link} target='_blank' rel='noopener noreferrer' key={item.link}>
+							{item.image && <img className='news-image' src={item.image} alt='' loading='lazy' />}
+							<div className='news-content'>
 							<div className='news-meta'>
-								<span className='news-source'>LRT</span>
+								<span className='news-source'>{item.source}</span>
 								{item.publishedAt && <time dateTime={item.publishedAt.toISOString()}>{newsDateFormatter.format(item.publishedAt)}</time>}
 							</div>
 							<div className='news-title'>{item.title}</div>
+							</div>
 						</a>
 					))}
 				</div>
@@ -245,20 +253,45 @@ export default function App() {
 
 		const loadNews = async () => {
 			try {
-				const response = await fetch(buildProxyUrl(news_link))
-				if (response.ok === false) throw new Error(`News request failed: ${response.status}`)
-				const text = await response.text()
-				const xml = new DOMParser().parseFromString(text, 'application/xml')
-				const items = Array.from(xml.getElementsByTagName('item'))
-					.map(item => {
+				const results = await Promise.allSettled(newsFeeds.map(async feed => {
+					const response = await fetch(buildProxyUrl(feed.url))
+					if (!response.ok) throw new Error(`${feed.source} news request failed: ${response.status}`)
+					const text = await response.text()
+					const xml = new DOMParser().parseFromString(text, 'application/xml')
+					return Array.from(xml.getElementsByTagName('item')).map(item => {
 						const title = item.getElementsByTagName('title')[0]?.textContent?.trim() || ''
-						const link = item.getElementsByTagName('link')[0]?.textContent?.trim() || ''
+						const rssLink = item.getElementsByTagName('link')[0]?.textContent?.trim() || ''
+						const guid = item.getElementsByTagName('guid')[0]?.textContent?.trim() || ''
+						const link = feed.source === 'DELFI'
+							? [guid, rssLink].find(url => /^https?:\/\/(www\.)?delfi\.lt\//i.test(url)) || ''
+							: rssLink
+						const mediaContent = item.getElementsByTagName('media:content')[0]?.getAttribute('url') || ''
+						const mediaThumbnail = item.getElementsByTagName('media:thumbnail')[0]?.getAttribute('url') || ''
+						const enclosure = Array.from(item.getElementsByTagName('enclosure'))
+							.find(node => node.getAttribute('type')?.startsWith('image/'))?.getAttribute('url') || ''
+						const description = item.getElementsByTagName('description')[0]?.textContent || ''
+						const descriptionImage = description.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1] || ''
+						const image = mediaContent || mediaThumbnail || enclosure || descriptionImage
 						const published = item.getElementsByTagName('pubDate')[0]?.textContent?.trim()
 						const publishedAt = published ? new Date(published) : null
-						return { title, link, publishedAt: publishedAt && !Number.isNaN(publishedAt.getTime()) ? publishedAt : null }
-					})
-					.filter(item => item.title && item.link)
-					.slice(0, 4)
+						return {
+							source: feed.source,
+							title,
+							link,
+							image,
+							publishedAt: publishedAt && !Number.isNaN(publishedAt.getTime()) ? publishedAt : null,
+						}
+					}).filter(item => item.title && item.link)
+				}))
+
+				const successfulFeeds = results.filter(result => result.status === 'fulfilled')
+				if (successfulFeeds.length === 0) throw new Error('All news requests failed')
+
+				const items = successfulFeeds
+					.flatMap(result => result.value
+						.sort((a, b) => (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0))
+						.slice(0, 1))
+					.sort((a, b) => (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0))
 
 				if (active) {
 					setNews(items)

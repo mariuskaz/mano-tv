@@ -344,15 +344,28 @@ header {
 }
 
 .news-card {
-  min-height:92px;
-  padding:13px 14px;
+  min-height:180px;
+  padding:0;
   box-sizing:border-box;
   border:1px solid #e6ebf2;
   border-radius:8px;
   background:#fff;
   color:inherit;
   text-decoration:none;
+  overflow:hidden;
   transition:border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.news-image {
+  display:block;
+  width:100%;
+  height:110px;
+  object-fit:cover;
+  background:#eef3f9;
+}
+
+.news-content {
+  padding:12px 14px 14px;
 }
 
 .news-card:hover {
