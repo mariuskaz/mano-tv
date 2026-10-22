@@ -206,28 +206,32 @@ header {
 }
 
 .games-heading {
-  display:flex;
+  display:inline-flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
   margin-bottom:14px;
+  padding:8px 14px;
+  background:#e5f1ff;
+  color:#1680ff;
+  border-radius:20px;
+  font-size:0.8rem;
+  font-weight:600;
 }
 
 .games-heading h2 {
   margin:0;
-  color:#171b43;
-  font-size:1.05rem;
-  font-weight:400;
+  color:inherit;
+  font-size:inherit;
+  font-weight:inherit;
 }
 
 .basketball-icon {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:24px;
-  height:24px;
+  width:18px;
+  height:18px;
   flex:none;
-  border-radius:50%;
-  background:#e5f1ff;
 }
 
 .pulse-dot {
@@ -302,34 +306,37 @@ header {
 }
 
 .news-heading {
-  display:flex;
+  display:inline-flex;
   align-items:center;
-  gap:10px;
-  margin-bottom:12px;
+  gap:8px;
+  margin-bottom:14px;
+  padding:8px 14px;
+  background:#e5f1ff;
+  color:#1680ff;
+  border-radius:20px;
+  font-size:0.8rem;
+  font-weight:600;
 }
 
 .news-heading h2 {
   margin:0;
-  color:#171b43;
-  font-size:1.05rem;
-  font-weight:400;
+  color:inherit;
+  font-size:inherit;
+  font-weight:inherit;
 }
 
 .news-icon {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:24px;
-  height:24px;
+  width:18px;
+  height:18px;
   flex:none;
-  border-radius:50%;
-  background:#e5f1ff;
-  color:#1680ff;
 }
 
 .news-icon svg {
-  width:15px;
-  height:15px;
+  width:18px;
+  height:18px;
   fill:none;
   stroke:currentColor;
   stroke-width:1.9;
