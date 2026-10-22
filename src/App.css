@@ -1,5 +1,25 @@
 body {
   background:#f4f7fb;
+  scrollbar-width:thin;
+  scrollbar-color:#b8c6d9 #edf2f8;
+}
+
+::-webkit-scrollbar {
+  width:7px;
+  height:7px;
+}
+
+::-webkit-scrollbar-track {
+  background:#edf2f8;
+}
+
+::-webkit-scrollbar-thumb {
+  background:#b8c6d9;
+  border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background:#93a7c1;
 }
 
 progress::-webkit-progress-bar {
