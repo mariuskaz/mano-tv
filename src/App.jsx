@@ -114,6 +114,8 @@ function GamesGroup({title, games, loading}) {
 }
 
 function UpcomingGames({games, loading}) {
+	if (games.length === 0) return null
+
 	return (
 		<div className='upcoming-games'>
 			<GamesGroup title='Artimiausios rungtynės' games={games.slice(0, 6)} loading={loading} />
