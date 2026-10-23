@@ -130,7 +130,28 @@ const newsDateFormatter = new Intl.DateTimeFormat('lt-LT', {
 	minute: '2-digit',
 })
 
-function NewsSection({news, status}) {
+function UpcomingGameStrip({game}) {
+	if (!game) return null
+
+	return (
+		<article className='featured-game'>
+			<div className='featured-game-label'>
+				<span className='pulse-dot' aria-hidden='true' />
+				<span>Artimiausios rungtynės</span>
+			</div>
+			<div className='featured-game-main'>
+				<span className='game-league'>{game.league}</span>
+				<span className='featured-game-title'>{game.title}</span>
+			</div>
+			<div className='featured-game-details'>
+				<time dateTime={game.start.toISOString()}>{gameDateFormatter.format(game.start)}</time>
+				<span className='featured-game-channel'>{game.channelName}</span>
+			</div>
+		</article>
+	)
+}
+
+function NewsSection({news, status, games}) {
 	return (
 		<section className='news-section'>
 			<div className='news-heading'>
@@ -142,6 +163,7 @@ function NewsSection({news, status}) {
 				</span>
 				<h2>Naujausios žinios</h2>
 			</div>
+			<UpcomingGameStrip game={games[0]} />
 			{news.length > 0 ? (
 				<div className='news-list'>
 					{news.map(item => (
@@ -340,8 +362,7 @@ export default function App() {
                 <span>Dabar rodoma</span>
             </div>
             <Channels epg={guide} />
-            <NewsSection news={news} status={newsStatus} />
-            <UpcomingGames games={games} loading={isLoading} />
+            <NewsSection news={news} status={newsStatus} games={games} />
             {isLoading && <Loader />}
             {hasError && <Toast message="Error fetching EPG data!" button="Retry" action={() => setSynced(false)} />}
             {isOutdated && <Toast message="EPG is outdated!" button="Update" action={() => setSynced(false)} />}
