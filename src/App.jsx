@@ -140,7 +140,6 @@ function UpcomingGameStrip({game}) {
 				<span>Artimiausios rungtynės</span>
 			</div>
 			<div className='featured-game-main'>
-				<span className='game-league'>{game.league}</span>
 				<span className='featured-game-title'>{game.title}</span>
 			</div>
 			<div className='featured-game-details'>
