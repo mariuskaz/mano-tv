@@ -38,10 +38,14 @@ function Loader() {
 }
 
 function Toast({message, button, action}) {
+	const [dismissed, setDismissed] = useState(false)
+	if (dismissed) return null
+
 	return (
 		<div className='toast'>
-			{message}
+			<span>{message}</span>
 			<span className='toast-button' onClick={action}>{button}</span>
+			<button className='toast-close' type='button' aria-label='Uždaryti pranešimą' onClick={() => setDismissed(true)}><span aria-hidden='true'>&times;</span></button>
 		</div>
 	)
 }
