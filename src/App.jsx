@@ -45,7 +45,7 @@ function Toast({message, button, action}) {
 		<div className='toast'>
 			<span>{message}</span>
 			<span className='toast-button' onClick={action}>{button}</span>
-			<button className='toast-close' type='button' aria-label='Uždaryti pranešimą' onClick={() => setDismissed(true)}>&times;</button>
+			<button className='toast-close' type='button' aria-label='Uždaryti pranešimą' onClick={() => setDismissed(true)}><span aria-hidden='true'>&times;</span></button>
 		</div>
 	)
 }
