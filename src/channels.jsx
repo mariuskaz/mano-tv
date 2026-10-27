@@ -1,6 +1,6 @@
 export const channels = [
     {
-        id: "LRT Televizija.lt",
+        id: "LRT.lt",
         url: "https://www.lrt.lt/mediateka/tiesiogiai/lrt-televizija",
         logo: "https://www.lrt.lt/images/logo/logo-lrt.svg?v=673",
         name: "LRT",
@@ -42,31 +42,31 @@ export const channels = [
         name: "TV6",
     },
     {
-        id: "Lietuvos ryto TV.lt",
+        id: "LietuvosRytas.lt",
         url: "https://www.lietuvosryto.tv/eteris",
         logo: "https://content.tvprograma.lt/logo/220x80_0_80098400_1538461908m.png",
         name: "Lietuvos rytas",
     },
     {
-        id: "LRT Plius.lt",
+        id: "LRTPlius.lt",
         url: "https://www.lrt.lt/mediateka/tiesiogiai/lrt-plius",
         logo: "https://content.tvprograma.lt/logo/220x80_0_91824600_1652106605m.jpg",
         name: "LRT PLIUS",
     },
     {
-        id: "Info TV.lt",
+        id: "InfoTV.lt",
         url: "https://lnk.lt/tiesiogiai#infotv",
         logo: "https://content.tvprograma.lt/logo/220x80_0_34085600_1418495360m.png",
         name: "Info TV",
     },
     {
-        id: "Delfi TV.lt",
+        id: "DelfiTV.lt",
         url: "https://www.delfi.lt/video/puslapis/tv",
         logo: "https://content.tvprograma.lt/logo/220x80_0_11928400_1633001331m.png",
         name: "Delfi",
     },
     {
-        id: "TV3 Plus.lt",
+        id: "TV3Plus.lt",
         url: "https://play.tv3.lt/show/tv3-plus,live-4929289",
         logo: "https://content.tvprograma.lt/logo/220x80_0_37190500_1654152447m.png",
         name: "TV3 PLUS",

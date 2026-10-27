@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './App.css'
 import { channels } from './channels'
 
-const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
+const epg_link = 'https://www.open-epg.com/files/lithuania.xml'
 const newsFeeds = [
 	{ source: 'LRT', url: 'https://www.lrt.lt/?rss=' },
 	{ source: 'DELFI', url: 'https://feed.delfi.lt/v2/channel/global-lt?format=rss' },
