@@ -3,6 +3,7 @@ import './App.css'
 import { channels } from './channels'
 
 const epg_link = 'https://www.open-epg.com/files/lithuania.xml'
+const epgTimeCorrectionMinutes = 120
 const newsFeeds = [
 	{ source: 'LRT', url: 'https://www.lrt.lt/?rss=' },
 	{ source: 'DELFI', url: 'https://feed.delfi.lt/v2/channel/global-lt?format=rss' },
@@ -14,14 +15,14 @@ export function buildProxyUrl(targetUrl) {
     return `/api/proxy?url=${encodeURIComponent(targetUrl)}`
 }
 
-export function parseDate(d) {
-	const year = +d.slice(0, 4)
-	const month = +d.slice(4, 6)
-	const day = +d.slice(6, 8)
-	const h = +d.slice(8, 10)
-	const m = +d.slice(10, 12)
-	const offset = new Date().getTimezoneOffset() / 60
-	return new Date(year, month - 1, day, h - offset, m)
+export function parseDate(d, correctionMinutes = 0) {
+	const match = d?.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})?\s*([+-])(\d{2})(\d{2})/)
+	if (!match) return new Date(NaN)
+
+	const [, year, month, day, hour, minute, second = '00', sign, offsetHour, offsetMinute] = match
+	const offset = (+offsetHour * 60 + +offsetMinute) * (sign === '+' ? 1 : -1)
+	const utc = Date.UTC(+year, +month - 1, +day, +hour, +minute, +second) - offset * 60 * 1000
+	return new Date(utc + correctionMinutes * 60 * 1000)
 }
 
 function decodeHtmlEntities(value) {
@@ -206,8 +207,14 @@ export default function App() {
 	const fetchGuide = async () => {
 		try {
 			const res = await fetch(buildProxyUrl(epg_link))
+			if (!res.ok) throw new Error(`EPG request failed: ${res.status}`)
 			const text = await res.text()
+			const xml = new DOMParser().parseFromString(text, 'application/xml')
+			if (xml.getElementsByTagName('parsererror').length > 0 || xml.getElementsByTagName('programme').length === 0) {
+				throw new Error('EPG response is not a valid TV guide')
+			}
 			localStorage.setItem("epg", text)
+			localStorage.setItem("epgSource", epg_link)
 			setSynced(true)
 			setUpdated(false)
 		} catch (err) {
@@ -217,7 +224,7 @@ export default function App() {
   	}
 
 	useEffect(() => {
-		const epgText = localStorage.getItem('epg')
+		const epgText = localStorage.getItem('epgSource') === epg_link ? localStorage.getItem('epg') : null
 
 		const loadGuide = async () => {
 			if (!epgText) {
@@ -235,8 +242,8 @@ export default function App() {
 				const channelId = program.getAttribute("channel")
 				if (!channels.find(c => c.id === channelId)) continue
 
-				const start = parseDate(program.getAttribute("start"))
-				const stop = parseDate(program.getAttribute("stop"))
+				const start = parseDate(program.getAttribute("start"), epgTimeCorrectionMinutes)
+				const stop = parseDate(program.getAttribute("stop"), epgTimeCorrectionMinutes)
 				const title = program.getElementsByTagName("title")[0]?.textContent || ""
 				const description = program.getElementsByTagName("desc")[0]?.textContent || ""
 				const category = program.getElementsByTagName("category")[0]?.textContent || ""
