@@ -2,8 +2,8 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './App.css'
 import { channels } from './channels'
 
-const epg_link = 'https://www.open-epg.com/files/lithuania.xml'
-const epgTimeCorrectionMinutes = 120
+const epg_link = 'https://www.open-epg.com/files/lithuania2.xml'
+const epgTimeCorrectionMinutes = 60
 const newsFeeds = [
 	{ source: 'LRT', url: 'https://www.lrt.lt/?rss=' },
 	{ source: 'DELFI', url: 'https://feed.delfi.lt/v2/channel/global-lt?format=rss' },
@@ -86,7 +86,7 @@ const gameDateFormatter = new Intl.DateTimeFormat('lt-LT', {
 
 function isBasketballBroadcast(title, description, category) {
 	const text = `${title} ${description} ${category}`
-	const league = /(eurolyga|euroleague|\blkl\b|lietuvos krepšinio lyga|betsafe[- ]?lkl|betsson[- ]?lkl)/i
+	const league = /(eurolyg|euroleague|\blkl\b|lietuvos krepšinio lyga|betsafe[- ]?lkl|betsson[- ]?lkl)/i
 	const review = /(apžvalga|žurnalas|magazinas|studija|dienoraštis|savaitė|top 10)/i
 	return league.test(text) && !review.test(title)
 }
