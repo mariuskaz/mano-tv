@@ -2,8 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import './App.css'
 import { channels } from './channels'
 
-const epg_link = 'https://www.open-epg.com/files/lithuania2.xml'
-const epgTimeCorrectionMinutes = 60
+const epg_link = 'https://www.open-epg.com/files/lithuania3.xml'
 const newsFeeds = [
 	{ source: 'LRT', url: 'https://www.lrt.lt/?rss=' },
 	{ source: 'DELFI', url: 'https://feed.delfi.lt/v2/channel/global-lt?format=rss' },
@@ -242,8 +241,8 @@ export default function App() {
 				const channelId = program.getAttribute("channel")
 				if (!channels.find(c => c.id === channelId)) continue
 
-				const start = parseDate(program.getAttribute("start"), epgTimeCorrectionMinutes)
-				const stop = parseDate(program.getAttribute("stop"), epgTimeCorrectionMinutes)
+				const start = parseDate(program.getAttribute("start"))
+				const stop = parseDate(program.getAttribute("stop"))
 				const title = program.getElementsByTagName("title")[0]?.textContent || ""
 				const description = program.getElementsByTagName("desc")[0]?.textContent || ""
 				const category = program.getElementsByTagName("category")[0]?.textContent || ""

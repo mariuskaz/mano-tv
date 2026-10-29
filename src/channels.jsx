@@ -1,6 +1,6 @@
 export const channels = [
     {
-        id: "LRT TELEVIZIJA.lt",
+        id: "LRT Televizija.lt",
         url: "https://www.lrt.lt/mediateka/tiesiogiai/lrt-televizija",
         logo: "https://www.lrt.lt/images/logo/logo-lrt.svg?v=673",
         name: "LRT",
@@ -54,13 +54,13 @@ export const channels = [
         name: "LRT PLIUS",
     },
     {
-        id: "INFO TV.lt",
+        id: "Info TV.lt",
         url: "https://lnk.lt/tiesiogiai#infotv",
         logo: "https://content.tvprograma.lt/logo/220x80_0_34085600_1418495360m.png",
         name: "Info TV",
     },
     {
-        id: "DELFI TV.lt",
+        id: "Delfi TV.lt",
         url: "https://www.delfi.lt/video/puslapis/tv",
         logo: "https://content.tvprograma.lt/logo/220x80_0_11928400_1633001331m.png",
         name: "Delfi",
